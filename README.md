@@ -8,7 +8,7 @@ controla o estoque do dia e fecha o caixa com financeiro, relatórios e um assis
 > roda com um **banco de dados falso no navegador e dados 100% fictícios**. Nenhum
 > cliente, telefone, valor ou chave real está neste repositório.
 
-**▶ Demo online:** _link da Vercel aqui_
+**▶ Demo online: [casegosto-vitrine.vercel.app](https://casegosto-vitrine.vercel.app)** (sem login: qualquer e-mail e senha entram)
 
 ![Painel do dia](docs/painel.png)
 
