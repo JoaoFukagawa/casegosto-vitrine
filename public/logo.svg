@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Casegosto">
+  <rect width="128" height="128" rx="28" fill="#f6ead8"/>
+  <circle cx="64" cy="64" r="50" fill="#b8741a"/>
+  <circle cx="64" cy="64" r="44" fill="none" stroke="#f6ead8" stroke-width="2" stroke-dasharray="3 5" opacity=".7"/>
+  <!-- tigela -->
+  <path d="M30 62h68a34 34 0 0 1-68 0z" fill="#f6ead8"/>
+  <rect x="50" y="94" width="28" height="6" rx="3" fill="#f6ead8"/>
+  <!-- vapor -->
+  <g fill="none" stroke="#f6ead8" stroke-width="4" stroke-linecap="round">
+    <path d="M50 52c-5-6 5-10 0-17"/>
+    <path d="M64 52c-5-6 5-10 0-17"/>
+    <path d="M78 52c-5-6 5-10 0-17"/>
+  </g>
+</svg>

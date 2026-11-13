@@ -1,0 +1,122 @@
+import { useState } from "react";
+import { supabase, IS_DEMO } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
+import { translateAuthError } from "@/lib/authErrors";
+
+export default function Auth() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Login realizado!");
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { display_name: displayName },
+            emailRedirectTo: window.location.origin,
+          },
+        });
+        if (error) throw error;
+        toast.success("Conta criada! Verifique seu e-mail para confirmar.");
+      }
+    } catch (error: any) {
+      toast.error(translateAuthError(error?.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+              <img src="/logo.svg" alt="Casegosto" className="h-11 w-11 rounded-lg object-cover" />
+            </div>
+          </div>
+          <CardTitle className="font-heading text-2xl tracking-[1.5px]">CASEGOSTO</CardTitle>
+          <p className="text-[var(--color-text-secondary)] text-sm">
+            {isLogin ? "Entre na sua conta" : "Crie sua conta"}
+          </p>
+          {IS_DEMO && (
+            <p className="mt-2 rounded-lg bg-[var(--color-surface-hover)] px-3 py-2 text-xs text-[var(--color-text-secondary)]">
+              Modo demonstração: qualquer e-mail e senha entram.
+            </p>
+          )}
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {!isLogin && (
+              <div>
+                <Label htmlFor="name">Nome</Label>
+                <Input
+                  id="name"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Seu nome"
+                  required={!isLogin}
+                />
+              </div>
+            )}
+            <div>
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="seu@email.com"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                minLength={6}
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full gradient-warm text-[var(--color-accent-text)] shadow-warm font-heading font-bold"
+              disabled={loading}
+            >
+              {loading ? "Aguarde..." : isLogin ? "Entrar" : "Criar Conta"}
+            </Button>
+          </form>
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              {isLogin ? "Não tem conta? Cadastre-se" : "Já tem conta? Faça login"}
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
